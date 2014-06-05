@@ -837,7 +837,7 @@ def loadConfiguration():
     config.set('launcher', 'gamepath', '~/.local/share/Steam/SteamApps/common/Crusader Kings II'.replace('~', os.path.expanduser('~')))
   
   if not config.has_option('launcher', 'modpath'):
-    config.set('launcher', 'modpath', '~/Documents/Paradox Interactive/Crusader Kings II/mod'.replace('~', os.path.expanduser('~')))
+    config.set('launcher', 'modpath', '~/.paradoxinteractive/Crusader Kings II/mod'.replace('~', os.path.expanduser('~')))
     
   if not config.has_option('launcher', 'prepend'):
     config.set('launcher', 'prepend', '')
