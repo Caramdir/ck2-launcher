@@ -494,6 +494,8 @@ class Launcher(wx.Frame):
     if len(config.get('launcher', 'prepend').strip()) > 0:
       command = config.get('launcher', 'prepend').split(' ')
     command.append(config.get('launcher', 'gamepath') + '/' + config.get('launcher', 'gamebinary'))
+    if len(config.get('launcher', 'gameoptions').strip()) > 0:
+        command.append(config.get('launcher', 'gameoptions'))
     
     # Decide which mods to load
     if (len(selectedMods) == 0):
@@ -632,6 +634,16 @@ class Configuration(wx.Frame):
     gbSizer.Add(gbLabel, flag=wx.ALIGN_CENTER_VERTICAL)
     gbSizer.Add(self.gbInput, flag=wx.ALIGN_CENTER_VERTICAL)
     
+    # Command line options label, input and sizer
+    goSizer = wx.BoxSizer(wx.HORIZONTAL)
+    goLabel = wx.StaticText(self.panel, label=' Command line options:', size=(160, -1))
+    goLabel.SetFont(labelFont)
+    
+    #: Input field for the prepended commands
+    self.goInput = wx.TextCtrl(self.panel, value=config.get('launcher', 'gameoptions'), size=(435, -1))
+    goSizer.Add(goLabel, flag=wx.ALIGN_CENTER_VERTICAL)
+    goSizer.Add(self.goInput, flag=wx.ALIGN_CENTER_VERTICAL)
+    
     # Prepend label, input and sizer
     ppSizer = wx.BoxSizer(wx.HORIZONTAL)
     ppLabel = wx.StaticText(self.panel, label=' Prepend commands:', size=(160, -1))
@@ -657,6 +669,7 @@ class Configuration(wx.Frame):
     self.vsizer.Add(gpSizer)
     self.vsizer.Add(mpSizer)
     self.vsizer.Add(gbSizer)
+    self.vsizer.Add(goSizer)
     self.vsizer.Add(ppSizer)
     self.vsizer.Add(buttonSizer, flag=wx.ALIGN_RIGHT)
     
@@ -745,6 +758,7 @@ class Configuration(wx.Frame):
     config.set('launcher', 'modpath', self.mpInput.GetValue())
     config.set('launcher', 'prepend', self.ppInput.GetValue())
     config.set('launcher', 'gamebinary', self.gbInput.GetValue())
+    config.set('launcher', 'gameoptions', self.goInput.GetValue())
     config.write(open(CONFIG_FILE, 'w'))
     
     # Configuration may have changed, reload mod and dlc list
@@ -844,6 +858,9 @@ def loadConfiguration():
     
   if not config.has_option('launcher', 'gamebinary'):
     config.set('launcher', 'gamebinary', 'ck2')
+  
+  if not config.has_option('launcher', 'gameoptions'):
+    config.set('launcher', 'gameoptions', '')
     
   # Save configuration to file
   config.write(open(CONFIG_FILE, 'w'))
